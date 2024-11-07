@@ -4,9 +4,9 @@
   "description": "Multiplayer Battleship Game",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",   // Ensure the script references the full file path 'server.js'
-    "dev": "nodemon server.js",   // Also ensure it references 'server.js'
-    "build": "echo 'No build step defined'"  // This is fine for now, but you can replace it with actual build steps later if needed
+    "start": "node server.js",   
+    "dev": "nodemon server.js",   
+    "build": "echo 'No build step defined'"  
   },
   "repository": {
     "type": "git",
