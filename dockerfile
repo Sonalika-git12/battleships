@@ -1,5 +1,5 @@
 # Use Node.js 18 as the base image
-FROM node:18
+FROM node:18 AS node-builder
 
 # Set the working directory inside the container
 WORKDIR /usr/src/app
@@ -8,14 +8,25 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install
 
-# Install PM2 globally
-RUN npm install -g pm2
-
 # Copy the entire application code to the container
 COPY . .
 
-# Expose the application port
+# Build the application (for React/Angular apps)
+RUN npm run build
 
+# ------------------------
+# Build Tomcat Layer
+# ------------------------
+FROM tomcat:9.0-jdk11
 
-# Start the application with PM2
-CMD ["pm2-runtime", "server.js"]
+# Set up Tomcat working directory
+WORKDIR /usr/local/tomcat/webapps/ROOT
+
+# Copy built files from Node.js builder
+COPY --from=node-builder /usr/src/app/build/ .
+
+# Expose Tomcat default port
+EXPOSE 8089
+
+# Start Tomcat
+CMD ["catalina.sh", "run"]
